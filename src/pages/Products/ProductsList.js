@@ -7,19 +7,27 @@ import { FilterBar } from "./components/FilterBar";
 
 import { useFilter } from "../../context";
 import { getProductList } from "../../services";
+import { toast } from "react-toastify";
 
 export const ProductsList = () => {
-
+  const { products, initialProductList } = useFilter();
   const [show, setShow] = useState(false);
   const search = useLocation().search;
   const searchTerm = new URLSearchParams(search).get("q");
   useTitle("Explore eBooks Collection");
-  const { products, initialProductList } = useFilter();
-  useEffect(() => {
 
+  useEffect(() => {
     async function fetchProducts() {
-      const data = await getProductList(searchTerm);
-      initialProductList(data);
+      try {
+        const data = await getProductList(searchTerm);
+        initialProductList(data);
+      } catch (error) {
+        toast.error(error.message, {
+          position: "bottom-center",
+          auto: "5000",
+          closeOnClick: "true"
+        });
+      }
     }
     fetchProducts();
   }, [searchTerm]);

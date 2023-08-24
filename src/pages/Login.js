@@ -12,12 +12,21 @@ export const Login = () => {
 
     async function handleLogin(event) {
         event.preventDefault();
-        const authDetail = {
-            email: email.current.value,
-            password: password.current.value
+        try {
+            const authDetail = {
+                email: email.current.value,
+                password: password.current.value
+            }
+            const data = await login(authDetail);
+            data.accessToken ? navigate("/products") : toast.error(data);
         }
-        const data = await login(authDetail);
-        data.accessToken ? navigate("/products") : toast.error(data);
+        catch (error) {
+            toast.error(error.message, {
+                position: "bottom-center",
+                auto: "5000",
+                closeOnClick: "true"
+            });
+        }
     }
     return (
         <main>

@@ -11,7 +11,10 @@ export async function getUser() {
         headers: { "content-Type": "application/json", Authorization: `Bearer ${browserData.token}` }
     }
 
-    const response = await fetch(`http://localhost:8000/600/users/${browserData.cbid}`, requestOptions);
+    const response = await fetch(`${process.env.REACT_APP_HOST}/600/users/${browserData.cbid}`, requestOptions);
+    if (!response.ok) {
+        throw { message: response.statusText, status: response.status }
+    }
     const data = response.json();
     return data;
 }
@@ -28,22 +31,29 @@ export async function createOrder(cartList, total, user) {
             id: user.id
         }
     }
-
-    const response = await fetch("http://localhost:8000/660/orders", {
+    const requestOptions = {
         method: "POST",
         headers: { "content-Type": "application/json", Authorization: `Bearer ${browserData.token}` },
         body: JSON.stringify(order)
-    });
+    }
+    const response = await fetch(`${process.env.REACT_APP_HOST}/660/orders`, requestOptions);
+    if (!response.ok) {
+        throw { message: response.statusText, status: response.status }
+    }
     const data = await response.json();
     return data;
 }
 
 export async function getUserOrder() {
     const browserData = getSession();
-    const response = await fetch(`http://localhost:8000/660/orders?user.id=${browserData.cbid}`, {
+    const requestOptions = {
         method: "GET",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${browserData.token}` }
-    })
+    }
+    const response = await fetch(`${process.env.REACT_APP_HOST}/660/orders?user.id=${browserData.cbid}`, requestOptions)
+    if (!response.ok) {
+        throw { message: response.statusText, status: response.status }
+    }
     const data = await response.json();
     return data;
 }

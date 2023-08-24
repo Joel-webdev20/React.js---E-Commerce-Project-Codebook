@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../../context"
 import { createOrder, getUser } from "../../../services";
+import { toast } from "react-toastify";
 
 
 export const Checkout = ({ setCheckout }) => {
@@ -11,29 +12,37 @@ export const Checkout = ({ setCheckout }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-
         async function fetchData() {
-            const data = await getUser();
-            setUser(data);
+            try {
+                const data = await getUser();
+                setUser(data);
+            } catch (error) {
+                toast.error(error.message, {
+                    position: "bottom-center",
+                    auto: "5000",
+                    closeOnClick: "true"
+                });
+            }
         }
         fetchData();
     }, []);
 
     async function handleOrderSubmit(event) {
         event.preventDefault();
-
         try {
             const data = await createOrder(cartList, total, user);
             clearCart();
             navigate("/order-summary", { state: { data: data, status: true } });
         }
         catch (error) {
+            toast.error(error.message, {
+                position: "bottom-center",
+                auto: "5000",
+                closeOnClick: "true"
+            });
             navigate("/order-summary", { state: { status: false } });
         }
     }
-
-
-
     return (
         <section>
             <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50"></div>

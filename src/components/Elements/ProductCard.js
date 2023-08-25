@@ -7,7 +7,7 @@ import { useCart } from "../../context";
 export const ProductCard = ({ product }) => {
     const [inCart, setInCart] = useState(false);
     const { cartList, addToCart, removeToCart } = useCart();
-    const { id, name, overview, price, best_seller, image_local, rating } = product;
+    const { id, name, overview, price, best_seller, poster, rating } = product;
 
     useEffect(() => {
         const productInCart = cartList.find(item => item.id === product.id);
@@ -23,7 +23,7 @@ export const ProductCard = ({ product }) => {
     return (
         <div className="m-3 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
             <Link to={`/products/${id}`} className="relative" >
-                <img className="rounded-t-lg w-full h-64" src={image_local} alt={name} />
+                <img className="rounded-t-lg w-full h-64" src={poster} alt={name} />
                 {best_seller && <span className="absolute top-4 left-2 px-2 bg-orange-500 bg-opacity-90 text-white rounded">Best Seller</span>}
             </Link>
             <div className="p-5">

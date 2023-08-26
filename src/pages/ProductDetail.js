@@ -25,7 +25,6 @@ export const ProductDetail = () => {
                     closeOnClick: "true"
                 });
             }
-
         }
         fetchProducts();
     }, [id]);
